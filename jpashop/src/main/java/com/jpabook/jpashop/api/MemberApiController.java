@@ -2,9 +2,9 @@ package com.jpabook.jpashop.api;
 
 import com.jpabook.jpashop.domain.Member;
 import com.jpabook.jpashop.service.MemberService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
