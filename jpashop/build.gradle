@@ -26,7 +26,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '2.0.2'
+	implementation group: 'jakarta.validation', name: 'jakarta.validation-api'
+	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5-jakarta'
+
+
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
