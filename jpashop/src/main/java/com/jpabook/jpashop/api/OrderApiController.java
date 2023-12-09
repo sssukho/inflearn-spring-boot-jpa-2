@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -25,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * V3. 엔티티를 조회해서 DTO로 변환 (fetch join 사용O)
  * - 페이징 시에는 N 부분을 포기해야 함(대신에 batch fetch size? 옵션 주면 N -> 1 쿼리로 변경 가능)
+ *
+ * V3.1 엔티티를 조회해서 DTO로 변환 페이징 고려 - ToOne 관계만 우선 모두 페치 조인으로 최적화 - 컬렉션 관계는
+ * - hibernate.default_batch_fetch_size, @BatchSize로 최적화
  *
  * V4. JPA에서 DTO로 바로 조회, 컬렉션 N 조회 (1 + N Query)
  * - 페이징 가능
@@ -67,6 +71,34 @@ public class OrderApiController {
                 .collect(Collectors.toList());
         return result;
     }
+
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWithItem();
+        List<OrderDto> result = orders.stream()
+            .map(o -> new OrderDto(o))
+            .collect(Collectors.toList());
+
+        return result;
+    }
+
+    /**
+     * V3.1 엔티티를 조회해서 DTO로 변환 페이징 고려 - ToOne 관계만 우선 모두 페치 조인으로 최적화 - 컬렉션 관계는
+     * hibernate.default_batch_fetch_size, @BatchSize로 최적화
+     */
+    @GetMapping("api/v3.1/orders")
+    public List<OrderDto> ordersV3_page(
+        @RequestParam(value = "offset", defaultValue = "0") int offset,
+        @RequestParam(value = "limit", defaultValue = "100") int limit) {
+
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit);
+        List<OrderDto> result = orders.stream()
+            .map(o -> new OrderDto(o))
+            .collect(Collectors.toList());
+
+        return result;
+    }
+
 
     @Data
     static class OrderDto {

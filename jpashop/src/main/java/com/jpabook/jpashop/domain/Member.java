@@ -6,9 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
-import javax.validation.constraints.NotEmpty;
+//import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
